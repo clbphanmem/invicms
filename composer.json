@@ -1,0 +1,15 @@
+{
+  "name": "clbphanmem/andycms",
+  "description": "Andy CMS.",
+  "keywords": ["cms", "andy"],
+  "license": "MIT",
+  "type": "project",
+  "autoload": {
+    "psr-4": {
+      "Cores\\": "Cores/",
+      "Libraries\\": "Libraries/",
+      "Plugins\\": "Plugins/",
+      "Templates\\": "Templates/"
+    }
+  }
+}
