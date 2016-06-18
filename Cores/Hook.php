@@ -28,8 +28,10 @@ class Hook
     {
         if (isset(static::$actionArr[$position])) {
             $hooks = static::sortPriority(static::$actionArr[$position], $lowestToHighest);
+            $vars = [];
             foreach ($hooks as $hook) {
-                call_user_func_array($hook['callback'], $hook['vars']);
+                $vars = array_merge($vars, $hook['vars']);
+                call_user_func_array($hook['callback'], $vars);
             }
         }
         return static::getInstance();
