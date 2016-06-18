@@ -1,10 +1,11 @@
 <?php
 require 'bootstrap.php';
 use Cores\Route as Route;
+use Cores\Database as Database;
+use Cores\Models\Category as Category;
 
-Route::get('abc/{id}/get', function($id) { // Lỗi khi bỏ "get" vẫn chạy
-    $test = 333;
-    echo 'Hello World ' . $id;
+Route::get('/', function () { // Lỗi khi bỏ "get" vẫn chạy
+    echo Category::name();
 });
 
 Route::get('abc/{id}/more', function($id) { // Lỗi khi bỏ "get" vẫn chạy

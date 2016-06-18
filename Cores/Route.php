@@ -92,6 +92,10 @@ class Route {
         return false;
     }
 
+    /**
+     * Xác nhận Route
+     * @return array
+     */
     public static function verifyRoute(): array {
         $uri = static::getRequestURI();
         foreach (static::$routeArray as $key => $route) {
