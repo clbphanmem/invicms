@@ -7,20 +7,32 @@ use Cores\Models\Category as Category;
 
 Route::get('/', function () { // Lỗi khi bỏ "get" vẫn chạy
 //    echo Category::name();
+
     Hook::action('header', function () {
-        echo 'One';
+        echo 'One2<br/>';
     });
 
     Hook::action('header', function () {
-        echo 'Two';
+        echo 'Two5<br/>';
     }, 7);
 
     Hook::action('header', function () {
-        echo 'Three';
+        echo 'Two3<br/>';
+    }, 7);
+
+    Hook::action('header', function () {
+        echo 'Three<br/>';
     }, 9);
 
+    Hook::action('header', function () {
+        echo 'One1<br/>';
+    });
 
-    echo dump(Hook::$actionArr);
+
+//    echo dump(Hook::sortPriority(Hook::$actionArr['header']));
+    echo '<p>------</p>';
+    Hook::doAction('header');
+    echo '<p>------</p>';
 });
 
 Route::get('abc/{id}/more', function($id) { // Lỗi khi bỏ "get" vẫn chạy

@@ -19,8 +19,12 @@ class Hook
      * @param string $position
      * @return Hook
      */
-    public static function doAction(string $position, bool $runTopToBottom = true): Hook
+    public static function doAction(string $position, bool $lowestToHighest = true): Hook
     {
+        $hooks = static::sortPriority(static::$actionArr[$position], $lowestToHighest);
+        foreach ($hooks as $hook) {
+            call_user_func($hook['callback']);
+        }
         return static::getInstance();
     }
 
@@ -36,33 +40,30 @@ class Hook
     public static function action(string $actionName, $callback, int $priority = 10): Hook
     {
         if ($actionName && !empty($callback)) {
-            if (!static::$actionArr) { // Hook is not defined
-                static::$actionArr[$actionName][] = [
-                    'priority' => $priority,
-                    'callback' => $callback
-                ];
-            } elseif (isset(static::$actionArr[$actionName]) && static::$actionArr[$actionName]) { // Hook is defined
-                foreach (static::$actionArr[$actionName] as $key => $value) {
-                    if ($value['priority'] <= $priority) {
-                        static::$actionArr[$actionName][$key + 1]['priority'] = $priority;
-                        static::$actionArr[$actionName][$key + 1]['callback'] = $callback;
-                    } else {
-                        static::$actionArr[$actionName][$key - 1]['priority'] = $priority;
-                        static::$actionArr[$actionName][$key - 1]['callback'] = $callback;
-                    }
-                }
-            }
+            static::$actionArr[$actionName][] = [
+                'priority' => $priority,
+                'callback' => $callback
+            ];
         }
         return static::getInstance();
     }
 
-    public static function sortPriority(array $arr): array
+    public static function sortPriority(array $arr, bool $lowestToHighest = true): array
     {
         foreach ($arr as $k1 => $v1) {
             foreach ($arr as $k2 => $v2) {
-                
+                if ($lowestToHighest && $arr[$k1]['priority'] < $arr[$k2]['priority']) {
+                    $temp = $arr[$k1];
+                    $arr[$k1] = $arr[$k2];
+                    $arr[$k2] = $temp;
+                } elseif (!$lowestToHighest && $arr[$k1]['priority'] > $arr[$k2]['priority']) {
+                    $temp = $arr[$k1];
+                    $arr[$k1] = $arr[$k2];
+                    $arr[$k2] = $temp;
+                }
             }
         }
+        return $arr;
     }
 
 
